@@ -1,9 +1,28 @@
-
 LOCAL_PATH:= $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libuv
+LOCAL_SRC_FILES := ../libuv/$(TARGET_ARCH_ABI)/libuv.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/libuv/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libbinn
+LOCAL_SRC_FILES := ../binn/$(TARGET_ARCH_ABI)/libbinn.so
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/binn/include
+include $(PREBUILT_SHARED_LIBRARY)
+
+
 include $(CLEAR_VARS)
 
-# If using SEE, uncomment the following:
-# LOCAL_CFLAGS += -DSQLITE_HAS_CODEC
+LOCAL_CFLAGS += -DSQLITE_HAS_CODEC
+#LOCAL_CFLAGS += -DSQLITE_USE_URI=1
+#LOCAL_CFLAGS += -DSQLITE_ENABLE_JSON1
+LOCAL_CFLAGS += -DSQLITE_THREADSAFE=1
+LOCAL_CFLAGS += -DSQLITE_ENABLE_COLUMN_METADATA
+
+LOCAL_CFLAGS += -DSQLITE_OMIT_BUILTIN_TEST
+LOCAL_CFLAGS += -DSQLITE_OMIT_LOAD_EXTENSION
 
 #Define HAVE_USLEEP, otherwise ALL sleep() calls take at least 1000ms
 LOCAL_CFLAGS += -DHAVE_USLEEP=1
@@ -47,9 +66,13 @@ LOCAL_SRC_FILES:=                             \
 LOCAL_SRC_FILES += sqlite3.c
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/nativehelper/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../binn/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../libuv/include
 
 LOCAL_MODULE:= libsqliteX
 LOCAL_LDLIBS += -ldl -llog 
+
+LOCAL_SHARED_LIBRARIES := libbinn libuv
 
 include $(BUILD_SHARED_LIBRARY)
 
