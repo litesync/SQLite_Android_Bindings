@@ -215,14 +215,6 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
                 mConfiguration.label,
                 SQLiteDebug.DEBUG_SQL_STATEMENTS, SQLiteDebug.DEBUG_SQL_TIME);
 
-        setPageSize();
-        setForeignKeyModeFromConfiguration();
-        setJournalSizeLimit();
-        setAutoCheckpointInterval();
-        if( !nativeHasCodec() ){
-            setWalModeFromConfiguration();
-            setLocaleFromConfiguration();
-        }
         // Register custom functions.
         final int functionCount = mConfiguration.customFunctions.size();
         for (int i = 0; i < functionCount; i++) {
